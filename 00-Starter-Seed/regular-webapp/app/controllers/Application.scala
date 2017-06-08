@@ -7,7 +7,7 @@ import helpers.Auth0Config
 
 
 
-object Application extends Controller {
+class Application extends Controller {
 
   def index = Action {
     Ok(views.html.index(Auth0Config.get()))
