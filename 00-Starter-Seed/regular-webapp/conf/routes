@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index
+GET     /logout                     controllers.Application.logout
 GET     /callback                   controllers.Callback.callback(code: Option[String])
 GET     /user                       controllers.User.index
 
