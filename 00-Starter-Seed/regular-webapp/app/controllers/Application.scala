@@ -12,4 +12,8 @@ class Application extends Controller {
   def index = Action {
     Ok(views.html.index(Auth0Config.get()))
   }
+
+  def logout = Action {
+    Redirect(routes.Application.index()).withNewSession
+  }
 }
