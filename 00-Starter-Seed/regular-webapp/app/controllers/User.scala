@@ -1,16 +1,10 @@
 package controllers
 
 import javax.inject.Inject
-import play.api._
 import play.api.mvc._
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.http.{MimeTypes, HeaderNames}
-import play.api.libs.ws.WS
-import play.api.mvc.{Results, Action, Controller}
+import play.api.mvc.{Action, Controller}
 import play.api.libs.json._
 import play.api.cache._
-import play.api.Play.current
 
 
 class User @Inject() (cache: CacheApi) extends Controller {
