@@ -43,6 +43,10 @@ class Callback @Inject() (cache: CacheApi, ws: WSClient) extends Controller {
 
   def getToken(code: String): Future[(String, String)] = {
     val config = Auth0Config.get()
+    var audience = config.audience
+    if (config.audience == ""){
+      audience = String.format("https://%s/userinfo",config.domain)
+    }
     val tokenResponse = ws.url(String.format("https://%s/oauth/token", config.domain)).
       withHeaders(HeaderNames.ACCEPT -> MimeTypes.JSON).
       post(
@@ -52,7 +56,7 @@ class Callback @Inject() (cache: CacheApi, ws: WSClient) extends Controller {
           "redirect_uri" -> config.callbackURL,
           "code" -> code,
           "grant_type"-> "authorization_code",
-          "audience" -> ("https://" + config.domain + "/userinfo")
+          "audience" -> audience
         )
       )
       
