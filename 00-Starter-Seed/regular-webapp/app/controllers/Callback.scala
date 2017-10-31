@@ -4,8 +4,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import javax.inject.Inject
-import play.api.Play
-import play.api.Play.current
 import play.api.cache._
 import play.api.http.HeaderNames
 import play.api.http.MimeTypes
@@ -19,24 +17,28 @@ import helpers.Auth0Config
 
 class Callback @Inject() (cache: CacheApi, ws: WSClient) extends Controller {
   
-  def callback(codeOpt: Option[String] = None) = Action.async {
-    (for {
-      code <- codeOpt
-    } yield {
-      getToken(code).flatMap { case (idToken, accessToken) =>
-       getUser(accessToken).map { user =>
-          cache.set(idToken+ "profile", user)
-          Redirect(routes.User.index())
-            .withSession(
-              "idToken" -> idToken,
-              "accessToken" -> accessToken
-            )  
-      }
-        
-      }.recover {
-        case ex: IllegalStateException => Unauthorized(ex.getMessage)
-      }  
-    }).getOrElse(Future.successful(BadRequest("No parameters supplied")))
+  def callback(codeOpt: Option[String] = None, stateOpt: Option[String] = None) = Action.async {
+    if (stateOpt == cache.get("state")) {
+      (for {
+        code <- codeOpt
+      } yield {
+        getToken(code).flatMap { case (idToken, accessToken) =>
+          getUser(accessToken).map { user =>
+            cache.set(idToken + "profile", user)
+            Redirect(routes.User.index())
+              .withSession(
+                "idToken" -> idToken,
+                "accessToken" -> accessToken
+              )
+          }
+
+        }.recover {
+          case ex: IllegalStateException => Unauthorized(ex.getMessage)
+        }
+      }).getOrElse(Future.successful(BadRequest("No parameters supplied")))
+    } else {
+      Future.successful(BadRequest("Invalid state parameter"))
+    }
   }
 
   def getToken(code: String): Future[(String, String)] = {
