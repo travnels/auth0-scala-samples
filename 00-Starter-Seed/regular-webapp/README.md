@@ -31,7 +31,7 @@ Finally, run `sbt run` to start the app and try calling [http://localhost:9000/]
 
 In order to run the example with docker you need to have `docker` installed.
 
-You also need to set the enviroment variables as explained [previously](#running-the-example).
+You also need to set the environment variables as explained [previously](#running-the-example).
 
 Execute in command line `sh exec.sh` to run the Docker in Linux, or `.\exec.ps1` to run the Docker in Windows.
 
