@@ -1,0 +1,50 @@
+#{extends 'Secure/layout.html' /}
+
+<div id="login">
+
+    <script src="https://cdn.auth0.com/js/lock/10.20/lock.min.js"></script>
+    <script>
+        var lock = new Auth0Lock('Hel0gGbhEcJndakQkFE0HLFQZTlxeCdi', 'moonsault-test.auth0.com', {
+            auth: {
+                redirectUrl: 'http://localhost:9000/callback',
+                responseType: 'code',
+                params: {
+                    scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+                }
+            }
+        });
+    </script>
+    <button onclick="lock.show();">Login with Auth0</button>
+    <h1>&{'auth0.clientId'}</h1>
+    <h1>&{'secure.title'}</h1>
+
+	#{form @authenticate()}
+		
+		#{if flash.error}
+			<p class="error">
+				&{flash.error}
+			</p>
+		#{/if}
+		#{if flash.success}
+			<p class="success">
+				&{flash.success}
+			</p>
+		#{/if}
+	
+		<p id="username-field">
+			<label for="username">&{'secure.username'}</label>
+			<input type="text" name="username" id="username" value="${flash.username}" />
+		</p>
+		<p id="password-field">
+			<label for="password">&{'secure.password'}</label>
+			<input type="password" name="password" id="password" value="" />
+		</p>
+		<p id="remember-field">
+			<input type="checkbox" name="remember" id="remember" value="true" ${flash.remember ? 'checked="true"' : ''} />
+			<label for="remember">&{'secure.remember'}</label>
+		</p>
+		<p id="signin-field">
+			<input type="submit" id="signin" value="&{'secure.signin'}" />
+		</p>
+	#{/form}
+</div>

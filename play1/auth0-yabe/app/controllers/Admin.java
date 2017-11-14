@@ -13,8 +13,8 @@ public class Admin extends Controller {
     @Before
     static void setConnectedUser() {
         if(Security.isConnected()) {
-            User user = User.find("byEmail", Security.connected()).first();
-            renderArgs.put("user", user.fullname);
+            // could extract user from jwt to display here
+            renderArgs.put("user", "Test");
         }
     }
  

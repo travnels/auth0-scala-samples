@@ -9,6 +9,8 @@ GET     /posts/{tag}                    		Application.listTagged
 POST    /posts/{postId}/comments                Application.postComment
 GET     /captcha                                Application.captcha
 
+GET     /callback                               Security.callback
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
