@@ -55,6 +55,7 @@ public class Security extends Secure.Security {
 		String id_token = httpResponses.get(0).getJson().getAsJsonObject().get("id_token").toString();
 		System.out.println(id_token);
 		session.put("username", id_token);
+		session.put("jwt", id_token);
 
 		redirect("/admin");
 	}
